@@ -1,3 +1,6 @@
+(eval-when-compile
+  (require 'cl))
+
 (defconst solarized-description
   "Color theme by Ethan Schoonover, created 2011-03-24.
 Ported to Emacs by Greg Pfeil, http://ethanschoonover.com/solarized.")
@@ -97,6 +100,7 @@ will use the 256 degraded color mode."
           ((t (:foreground ,base0 :background ,base03 :inverse-video t))))
          (escape-glyph-face ((t (:foreground ,red))))
          (fringe ((t (:foreground ,base01 :background ,base02))))
+         (linum ((t (:foreground ,base01 :background ,base02))))
          (header-line ((t (:foreground ,base0 :background ,base2))))
          (highlight ((t (:background ,base02))))
          (hl-line ((t (:background ,base02))))
@@ -145,6 +149,10 @@ will use the 256 degraded color mode."
          (diff-file-header
           ((t (:background ,base1 :foreground ,base01 :weight ,bold))))
          (diff-refine-change ((t (:background ,base1))))
+         ;; IDO
+         (ido-only-match ((t (:foreground ,green))))
+         (ido-subdir ((t (:foreground ,blue))))
+         (ido-first-match ((t (:foreground ,green :weight ,bold))))
          ;; emacs-wiki
          (emacs-wiki-bad-link-face
           ((t (:foreground ,red :underline ,underline))))
@@ -283,13 +291,15 @@ will use the 256 degraded color mode."
          (cursor-color . ,base0))))))
 
 (defmacro create-solarized-theme (mode)
-  `(let ((theme-name ',(intern (concat "solarized-" (symbol-name mode))))
-         (defs ',(solarized-color-definitions mode)))
-     `(deftheme ,theme-name ,solarized-description)
-     (apply 'custom-theme-set-variables
-            theme-name
-            (mapcar (lambda (def) (list (car def) (cdr def))) (second defs)))
-     (apply 'custom-theme-set-faces theme-name (first defs))
-     (provide-theme theme-name)))
+  (let* ((theme-name (intern (concat "solarized-" (symbol-name mode))))
+         (defs (solarized-color-definitions mode))
+         (theme-vars (mapcar (lambda (def) (list (car def) (cdr def)))
+                             (second defs)))
+         (theme-faces (first defs)))
+    `(progn
+       (deftheme ,theme-name ,solarized-description)
+       (apply 'custom-theme-set-variables ',theme-name ',theme-vars)
+       (apply 'custom-theme-set-faces ',theme-name ',theme-faces)
+       (provide-theme ',theme-name))))
 
 (provide 'solarized-definitions)
