@@ -189,8 +189,8 @@ will use the 256 degraded color mode."
          (info-xref-visited ((t (:inherit info-xref :foreground ,magenta))))
          ;; org
          (org-hide ((t (:foreground ,base03))))
-         (org-todo ((t (:foreground ,base03 :background ,red :weight ,bold))))
-         (org-done ((t (:foreground ,green :weight ,bold))))
+         (org-todo ((t (:foreground ,red :box (:line-width 1 :color ,red :style released-button)))))
+         (org-done ((t (:foreground ,green :box (:line-width 1 :color ,green :style released-button)))))
          (org-todo-kwd-face ((t (:foreground ,red :background ,base03))))
          (org-done-kwd-face ((t (:foreground ,green :background ,base03))))
          (org-project-kwd-face ((t (:foreground ,violet :background ,base03))))
